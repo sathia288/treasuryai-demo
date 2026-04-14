@@ -77,8 +77,9 @@ def calculate_risk(tender_text, vendor):
     level = "Low" if score <= 30 else "Medium" if score <= 60 else "High" if score <= 75 else "Critical"
     return score, level, explanations, reg
 
-# Sidebar info
+# Sidebar info - FIXED VERSION
 st.sidebar.success("✅ Platform Status: LIVE DEMO")
 st.sidebar.info("""South African Public Sector Ready
 • SITA Transversal Contracts supported
-• National Treasury Instruction 2025-11 (S
+• National Treasury Instruction 2025-11 (SITA Cloud Framework 2.0 mandatory since April 2026)
+• POPIA Section 72 data sovereignty enforced in production""")
