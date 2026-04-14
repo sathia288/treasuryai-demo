@@ -20,7 +20,7 @@ st.markdown("""
 st.title("🛡️ TreasuryAI")
 st.markdown("**Public Sector CFO’s Intelligent Digital Transformation Co-Pilot** | PFMA • SITA • PPA 2024 • POPIA | Built for South Africa (2026)")
 
-# Sidebar with QR Code
+# Sidebar
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Flag_of_South_Africa.svg/800px-Flag_of_South_Africa.svg.png", width=100)
 st.sidebar.success("🤖 AI AGENT ACTIVE")
 st.sidebar.info("""South African Public Sector Ready
@@ -28,9 +28,9 @@ st.sidebar.info("""South African Public Sector Ready
 • National Treasury Instruction 2025-11
 • POPIA Section 72 – All data stays in SA""")
 
-# QR Code for easy sharing
+# Simple static QR code for the demo (no dynamic query params)
 st.sidebar.markdown("### Share this Demo")
-st.sidebar.image("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + st.experimental_get_query_params().get("url", ["https://your-app.streamlit.app"])[0], width=180)
+st.sidebar.image("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://your-streamlit-url.streamlit.app", width=180)
 
 # Mock Registry & Risk Engine
 class MockRegistry:
