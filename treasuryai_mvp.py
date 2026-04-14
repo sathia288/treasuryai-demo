@@ -3,7 +3,6 @@ import pandas as pd
 from datetime import datetime
 from fpdf import FPDF
 import plotly.graph_objects as go
-import random
 
 st.set_page_config(page_title="TreasuryAI", layout="wide", initial_sidebar_state="expanded")
 
@@ -13,14 +12,13 @@ st.markdown("""
     .main {background-color: #0a1f3d; color: #ffffff;}
     h1 {color: #00c853; font-weight: bold;}
     .stButton>button {background-color: #00c853; color: black; font-weight: bold;}
-    .gauge {border-radius: 15px;}
 </style>
 """, unsafe_allow_html=True)
 
 st.title("🛡️ TreasuryAI")
 st.markdown("**Public Sector CFO’s Intelligent Digital Transformation Co-Pilot** | PFMA • SITA • PPA 2024 • POPIA | Built for South Africa (2026)")
 
-# Sidebar
+# Sidebar (Fixed - no experimental query params)
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Flag_of_South_Africa.svg/800px-Flag_of_South_Africa.svg.png", width=100)
 st.sidebar.success("🤖 AI AGENT ACTIVE")
 st.sidebar.info("""South African Public Sector Ready
@@ -28,11 +26,10 @@ st.sidebar.info("""South African Public Sector Ready
 • National Treasury Instruction 2025-11
 • POPIA Section 72 – All data stays in SA""")
 
-# Simple static QR code for the demo (no dynamic query params)
 st.sidebar.markdown("### Share this Demo")
-st.sidebar.image("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://your-streamlit-url.streamlit.app", width=180)
+st.sidebar.image("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://su9w.streamlit.app", width=180)  # Replace with your actual URL if different
 
-# Mock Registry & Risk Engine
+# Mock Registry
 class MockRegistry:
     def check_vendor(self, vendor):
         data = {
@@ -57,7 +54,6 @@ def calculate_risk(tender_text, vendor):
     level = "Low" if score <= 30 else "Medium" if score <= 60 else "High" if score <= 75 else "Critical"
     return score, level, explanations, reg
 
-# Confetti Function
 def show_confetti():
     st.balloons()
 
@@ -74,19 +70,17 @@ with tab1:
         vendor = st.text_input("Vendor Name", "HealthTech Solutions")
     with col2:
         if st.button("🎤 Speak Now"):
-            st.info("🎙️ Voice input active (browser microphone) – describe the tender out loud")
-            # Real speech-to-text would go here in full production
+            st.info("🎙️ Voice input active – describe the tender out loud (browser microphone)")
     
     if st.button("🚀 Activate AI Agent", type="primary", use_container_width=True):
         with st.spinner("Agent is analysing..."):
-            # Animated steps
             st.write("🔍 Ingesting tender...")
             st.write("📡 Checking CSD / CIPC / SARS registries...")
             st.write("🧠 Running 15 South African risk heuristics...")
             
             score, level, explanations, entities = calculate_risk(tender_text, vendor)
             
-            # Beautiful Risk Gauge
+            # Risk Gauge
             fig = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=score,
@@ -94,8 +88,7 @@ with tab1:
                 title={'text': "Procurement Risk Score"},
                 gauge={'axis': {'range': [0,100]},
                        'bar': {'color': "#00c853" if score <= 60 else "#ff9800" if score <= 75 else "#f44336"},
-                       'steps': [{'range': [0,30], 'color': "#00c853"}, {'range': [30,60], 'color': "#ffeb3b"}, {'range': [60,100], 'color': "#f44336"}],
-                       'threshold': {'line': {'color': "white", 'width': 8}, 'value': 75}}))
+                       'steps': [{'range': [0,30], 'color': "#00c853"}, {'range': [30,60], 'color': "#ffeb3b"}, {'range': [60,100], 'color': "#f44336"}]}))
             st.plotly_chart(fig, use_container_width=True)
             
             if score <= 30:
@@ -125,17 +118,14 @@ with tab1:
                     st.download_button("📥 Download Branded Treasury Pack (PDF)", f, file_name="TreasuryAI_Treasury_Pack.pdf")
 
 with tab2:
-    st.subheader("💰 Live TCO Simulator – See the Money")
+    st.subheader("💰 Live TCO Simulator")
     solution = st.selectbox("Technology Option", ["Cloud ERP (SITA Transversal)", "On-Prem Refresh", "AI Analytics Platform"])
     users = st.slider("Number of Users", 50, 5000, 500, step=50)
     term = st.slider("Contract Term (Years)", 1, 5, 3)
-    
     base = users * 12000 * term
     tco = int(base * 1.12)
-    savings = int(tco * 0.22)
-    
-    st.metric("5-Year Total Cost of Ownership", f"R {tco:,.0f}", f"-R {savings:,.0f} savings vs traditional")
-    st.success("✅ Recommended: Cloud ERP via SITA Framework – POPIA compliant (AWS Cape Town)")
+    st.metric("5-Year Total Cost of Ownership", f"R {tco:,.0f}", "-22% vs traditional")
+    st.success("✅ Recommended: Cloud ERP via SITA Framework – POPIA compliant")
 
 with tab3:
     st.subheader("📊 CFO Command Centre")
@@ -143,20 +133,19 @@ with tab3:
         "Tender ID": ["RFP-2026-045", "RFB-Health-112"],
         "Vendor": ["Gijima", "HealthTech"],
         "Risk": ["Low", "High"],
-        "Value": [45000000, 85000000],
+        "Value (ZAR)": [45000000, 85000000],
         "Decision": ["Approved", "Rejected"]
     })
     st.dataframe(demo_data, use_container_width=True)
-    st.metric("Average Cycle Time Reduction", "68%", "9 months → 3 months")
 
 with tab4:
-    st.subheader("🏆 Overall Compliance Scorecard")
+    st.subheader("🏆 Compliance Scorecard")
     st.progress(92)
-    st.success("92/100 – Excellent Compliance Posture")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1: st.metric("SITA", "✅ Compliant")
-    with col2: st.metric("POPIA", "✅ Compliant")
-    with col3: st.metric("PFMA", "✅ Compliant")
-    with col4: st.metric("PPA 2024", "✅ Compliant")
+    st.success("92/100 – Excellent Compliance")
+    cols = st.columns(4)
+    with cols[0]: st.metric("SITA", "✅")
+    with cols[1]: st.metric("POPIA", "✅")
+    with cols[2]: st.metric("PFMA", "✅")
+    with cols[3]: st.metric("PPA 2024", "✅")
 
-st.caption("TreasuryAI • Designed live for Sathia Govender, CA(SA) • Ready for SITA accreditation & pilot deployment")
+st.caption("TreasuryAI • Designed for Sathia Govender, CA(SA) • Ready for pilot")
